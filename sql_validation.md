@@ -27,6 +27,7 @@ order by r.user_id
 Сортируем по user_id.
 
 Вывод на скриншоте:
+
 ![DBeaver](images/2.png)
 
 
@@ -60,6 +61,7 @@ order by r.user_id
 
 
 Вывод на скриншоте:
+
 ![DBeaver](images/3.png)
 
 
