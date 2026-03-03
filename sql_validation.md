@@ -12,8 +12,8 @@ group by r.user_id
 having COUNT(r.order_id)!=MAX(a.total_orders)
 order by r.user_id 
 
-<pre> ```python 
-print("Hello") ``` </pre>
+```python 
+print("Hello") ```
 
 
 
