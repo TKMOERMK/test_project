@@ -155,7 +155,7 @@ load = PythonOperator(
 )
 ```
 
-8. Убрал везде provide_context, поскольку он устарел и соотестветственно **kwargs заменил на **contex
+8. Убрал везде `provide_context`, поскольку он устарел и соотестветственно `**kwargs` заменил на `**contex`
 
 Было:
 ```python
