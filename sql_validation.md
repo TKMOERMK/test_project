@@ -94,6 +94,14 @@ order by r.user_id
 
 ![DBeaver](images/4.png)
 
+## Задание 3:
+Объясни возможные причины таких расхождений (не менее 3 причин)
+
+Для начала стоит проверить нет ли у нас дубликатов:
+
+```sql
+select count(order_id),count(distinct order_id) from orders_raw
+```
 
 
 
