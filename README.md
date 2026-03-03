@@ -7,8 +7,9 @@
 ## Блок 2 — Python + Pandas: отчёт и трансформация
 Код с комментариями в `generate_user_report.py`
 Результат в `user_report.csv`
+
 | user_id | views | clicks | purchases | avg_interval_sec | first_event | last_event |
-|1000|50|23|-----------|------------------|-------------|------------|
+|1000     |50     |23      |-----------|------------------|-------------|------------|
 
 
 
