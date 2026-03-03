@@ -52,16 +52,35 @@ dag = DAG(
     dag_id='order_processing_extended',
     default_args=default_args,
     schedule_interval='@hourly',
-    catchup=False, #убираем true чтобы даг не собирал все данные с 2023 года по сегодняшний день, а начал с текущего времени, либо мы могли бы просто изменить datetime поставив сегоднящную дату (если нам это надо)
+    catchup=False, 
     tags=['orders'],
-    max_active_runs=1, #тк соединение не стабильно ставим max_active_runs=1 иначе даг бы начал выполнение в следующий час пока не завершено выполнение предыдущего инстанса
-    on_failure_callback=notify_failure # интегрировал
+    max_active_runs=1, 
+    on_failure_callback=notify_failure 
 )
 ```
-3.`dag_id='order_processing_extended',` :  Поменял на именнованный аргумент, чтобы читаемость была лучше, теперь мы понимает что это название айди дага.
-4. `catchup=False,` : 
 
+3. `dag_id='order_processing_extended',` :  Поменял на именнованный аргумент, чтобы читаемость была лучше, теперь мы понимает что это название айди дага.
+4. `catchup=False,` : Убираю true чтобы даг не собирал все данные с 2023 года по сегодняшний день, а начал с текущего времени, либо мы могли бы просто изменить datetime поставив сегоднящную дату (если нам это надо).
+5. ` max_active_runs=1,` : Поскольку соединение нестабильно ставим max_active_runs=1 иначе даг бы начал выполнение в следующий час, пока не завершено выполнение предыдущего инстанса.
+6. `on_failure_callback=notify_failure` : notify_failure объявлен но не интегрирован, поэтому я его интегрировал в dag on_failure_callback=notify_failure.
 
+Было:
+
+```python
+from airflow.operators.dummy import DummyOperator
+start = DummyOperator(task_id='start', dag=dag)
+end = DummyOperator(task_id='end', dag=dag)
+```
+
+Стало: 
+
+```python
+from airflow.operators.empty import EmptyOperator
+start = EmptyOperator(task_id='start', dag=dag)
+end = EmptyOperator(task_id='end', dag=dag)
+```
+
+7. Заменил `DummyOperator` на `EmptyOperator`, поскольку это более современный подход.
 
 
 
