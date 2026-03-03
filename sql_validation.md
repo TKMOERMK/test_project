@@ -62,6 +62,34 @@ order by r.user_id
 ## Задание 2:
 Найди таких пользователей, у которых расхождение по выручке более чем на 5%
 
+```sql
+with raw_orders as (
+	select 
+		r.user_id,
+		sum(r.total_amount) as raw_total_revenue
+	from orders_raw r
+	group by r.user_id
+	order by r.user_id
+)
+select 
+	r.user_id,
+	r.raw_total_revenue ,
+	a.total_revenue ,
+	ABS((r.raw_total_revenue-a.total_revenue) / r.raw_total_revenue * 100) as difference
+from raw_orders r
+full outer join orders_agg a
+on r.user_id = a.user_id
+where ABS((r.raw_total_revenue-a.total_revenue) / r.raw_total_revenue * 100) > 5
+order by r.user_id 
+```
+
+Пояснение:
+
+
+
+Вывод на скриншоте:
+
+![DBeaver](images/4.png)
 
 
 
