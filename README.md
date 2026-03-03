@@ -9,7 +9,8 @@
 Результат в `user_report.csv`
 
 | user_id | views | clicks | purchases | avg_interval_sec | first_event | last_event |
-|1000     |50     |23      |-----------|------------------|-------------|------------|
+|---------|-------|--------|-----------|------------------|-------------|------------|
+| 1000 | 50 | 23 | purchases | avg_interval_sec | first_event | last_event |
 
 
 
