@@ -82,6 +82,110 @@ end = EmptyOperator(task_id='end', dag=dag)
 
 7. Заменил `DummyOperator` на `EmptyOperator`, поскольку это более современный подход.
 
+Было:
+```python
+def extract_orders(**kwargs):
+    print("Extracting orders...")
+    if random.random() < 0.2:
+        raise Exception("Random extraction failure")  
+
+def transform_orders(**kwargs):
+    print("Transforming orders...")
+
+def load_orders(**kwargs):
+    print("Loading orders to warehouse...")
+
+def notify_failure(context):
+    print("Sending alert to Slack...") 
+
+extract = PythonOperator(
+    task_id='extract_orders',
+    python_callable=extract_orders,
+    provide_context=True,
+    dag=dag,
+)
+
+transform = PythonOperator(
+    task_id='transform_orders',
+    python_callable=transform_orders,
+    provide_context=True,
+    dag=dag,
+)
+
+load = PythonOperator(
+    task_id='load_orders',
+    python_callable=load_orders,
+    provide_context=True,
+    dag=dag,
+)
+```
+
+Стало:
+```python
+def extract_orders(**context):
+    print("Extracting orders...")
+    if random.random() < 0.2:
+        raise Exception("Random extraction failure")  
+
+def transform_orders(**context):
+    print("Transforming orders...")
+
+def load_orders(**context):
+    print("Loading orders to warehouse...")
+
+def notify_failure(**context): 
+    print("Sending alert to Slack...") 
+
+extract = PythonOperator(
+    task_id='extract_orders',
+    python_callable=extract_orders,
+    dag=dag,
+)
+
+transform = PythonOperator(
+    task_id='transform_orders',
+    python_callable=transform_orders,
+    dag=dag,
+)
+
+load = PythonOperator(
+    task_id='load_orders',
+    python_callable=load_orders,
+    dag=dag,
+)
+```
+
+8. Убрал везде provide_context, поскольку он устарел и соотестветственно **kwargs заменил на **contex
+
+Было:
+```python
+check_not_empty = PostgresOperator(
+    task_id='check_agg_table',
+    postgres_conn_id='postgres_default',
+    sql='SELECT COUNT(*) FROM orders_agg;',
+    dag=dag,
+)
+```
+Стало: 
+
+```python
+from airflow.hooks.postgres_hook import PostgresHook
+
+def check_orders_not_empty():
+    hook = PostgresHook(postgres_conn_id='postgresELMIR')
+    result = hook.get_first("SELECT COUNT(*) FROM orders_agg;")
+
+    if result[0] == 0:
+        raise ValueError("Таблица пуста\(")
+
+check_not_empty = PythonOperator(
+    task_id='check_agg_table',
+    python_callable=check_orders_not_empty,
+    dag=dag,
+)
+```
+9. Изначальная таска не делает проверку, она возвращает число, причем даже если там 0 он все равно не упадет, что бесмысленно, тк мы буквально проверяем на пустоту, поэтому в соответствие с заданием : 3. Добавить в код 1 дополнительный `task`, который проверяет, что таблица `orders_agg` не пуста (можно использовать `PostgresOperator` или `PythonOperator`) я добавил таск используя хук.
+
 
 
 
