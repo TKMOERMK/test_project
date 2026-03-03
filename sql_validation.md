@@ -25,3 +25,51 @@ order by r.user_id
   
 Далее мы группируем всё по пользователю и оставляем только тех, у кого реальное количество заказов не равно тому, что написано в агрегированной таблице.
 Сортируем по user_id.
+
+Вывод на скриншоте:
+![DBeaver](images/2.png)
+
+
+### Вариант 2
+
+```sql
+with raw_orders as (
+	select 
+		r.user_id,
+		COUNT(r.order_id) as raw_total_orders
+	from orders_raw r
+	group by r.user_id
+	order by r.user_id
+)
+select 
+	r.user_id,
+	r.raw_total_orders,
+	a.total_orders
+from raw_orders r
+full outer join orders_agg a 
+on r.user_id = a.user_id
+where r.raw_total_orders!=a.total_orders 
+order by r.user_id
+```
+
+
+
+
+
+
+
+
+Вывод на скриншоте:
+![DBeaver](images/3.png)
+
+
+
+
+
+
+
+
+
+
+
+
