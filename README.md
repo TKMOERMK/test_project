@@ -40,6 +40,7 @@
 
 ## Блок 3 — Разбор чужого DAG'а (Airflow)
 
+Исправленный код находится в  `dag_order_processing_fixed.py`
 
+Описание исправлений и комментарии находятся в `dag_review.md` 
 
-СТЕК ТЕХНОЛОГИЙ: Docker, Apache Airflow, PostgreSQL и DBeaver.
